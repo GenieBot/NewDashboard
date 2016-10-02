@@ -9,6 +9,6 @@ public class UserManager {
 
     private final Map<Session, User> users = new HashMap<>();
 
-    
+
 
 }

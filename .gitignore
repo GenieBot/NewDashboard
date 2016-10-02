@@ -1,0 +1,5 @@
+.idea
+target
+application.properties
+beans.xml
+GenieDashboard.iml
