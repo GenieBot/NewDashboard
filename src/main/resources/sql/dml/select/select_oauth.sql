@@ -1,0 +1,1 @@
+SELECT token, refresh_token, expires_in FROM oauth WHERE user_id=?

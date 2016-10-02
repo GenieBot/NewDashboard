@@ -1,0 +1,1 @@
+SELECT bot_id, auth_method FROM clients WHERE id=?

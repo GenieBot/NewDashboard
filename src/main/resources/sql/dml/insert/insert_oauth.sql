@@ -1,0 +1,1 @@
+INSERT INTO oauth VALUES (?, ?, ?, ?);

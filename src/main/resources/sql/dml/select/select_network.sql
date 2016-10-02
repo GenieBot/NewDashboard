@@ -1,0 +1,1 @@
+SELECT bot_id, client FROM networks WHERE id=?

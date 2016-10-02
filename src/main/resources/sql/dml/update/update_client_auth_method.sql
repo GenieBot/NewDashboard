@@ -1,0 +1,1 @@
+UPDATE clients SET auth_method=? WHERE id=?

@@ -1,0 +1,1 @@
+SELECT user_id, bot_id, client FROM client_users WHERE id=?

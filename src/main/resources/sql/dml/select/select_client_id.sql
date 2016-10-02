@@ -1,0 +1,1 @@
+SELECT id FROM clients WHERE bot_id=?

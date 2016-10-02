@@ -1,0 +1,1 @@
+SELECT email, password, salt FROM user_credentials WHERE id=?

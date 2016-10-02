@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS networks (
+  id UUID PRIMARY KEY NOT NULL,
+  bot_id UUID NOT NULL,
+  client UUID NOT NULL,
+  FOREIGN KEY (client) REFERENCES clients(id)
+);

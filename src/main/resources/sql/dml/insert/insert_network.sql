@@ -1,0 +1,1 @@
+INSERT INTO networks VALUES (?, ?, ?);
