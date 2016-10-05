@@ -20,15 +20,21 @@ title="none"
 						<span></span>
 					</span>
 	                <div id="nav-menu" class="nav-right nav-menu" style="font-size: 25px; text-transform: uppercase;">
-	                    <a class="nav-item" href="/networks">
-	                        <span>Chats</span>
-	                    </a>
-	                    <a class="nav-item" href="/store">
-	                        <span>Store</span>
-	                    </a>
-	                    <a class="nav-item" href="/login">
-	                        <span>Login</span>
-	                    </a>
+	                    <#if logged_in?has_content && logged_in>
+                            <a class="nav-item" href="/networks">
+                                <span>Chats</span>
+                            </a>
+                            <a class="nav-item" href="/store">
+                                <span>Store</span>
+                            </a>
+                            <a class="nav-item" href="/account">
+                                <span>Account</span>
+                            </a>
+	                    <#else>
+                            <a class="nav-item" href="/login">
+                                <span>Login</span>
+                            </a>
+	                    </#if>
 	                </div>
 	            </nav>
 	        </div>

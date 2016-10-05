@@ -13,13 +13,15 @@ public class UpdateOAuthStatement extends AbstractStatement<Integer> {
     private final String token;
     private final String refreshToken;
     private final int expiresIn;
+    private final int startTime;
     private final UUID user;
 
-    public UpdateOAuthStatement(Database database, String token, String refreshToken, int expiresIn, UUID user) {
+    public UpdateOAuthStatement(Database database, String token, String refreshToken, int expiresIn, int startTime, UUID user) {
         super(database, Statements.UPDATE_OAUTH);
         this.token = token;
         this.refreshToken = refreshToken;
         this.expiresIn = expiresIn;
+        this.startTime = startTime;
         this.user = user;
     }
 
@@ -30,6 +32,7 @@ public class UpdateOAuthStatement extends AbstractStatement<Integer> {
             statement.setString(1, token);
             statement.setString(2, refreshToken);
             statement.setInt(3, expiresIn);
+            statement.setInt(4, startTime);
             statement.setObject(4, user);
             return statement.executeUpdate();
         }

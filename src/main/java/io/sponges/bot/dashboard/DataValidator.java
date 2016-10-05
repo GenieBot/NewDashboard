@@ -2,7 +2,7 @@ package io.sponges.bot.dashboard;
 
 public interface DataValidator {
 
-    default boolean validateStrings(String... strings) {
+    default boolean valid(String... strings) {
         if (strings == null) {
             return false;
         }

@@ -12,10 +12,10 @@ public class UpdateUserCredentialsStatement extends AbstractStatement<Integer> {
 
     private final String email;
     private final String password;
-    private final String salt;
+    private final byte[] salt;
     private final UUID user;
 
-    public UpdateUserCredentialsStatement(Database database, String email, String password, String salt, UUID user) {
+    public UpdateUserCredentialsStatement(Database database, String email, String password, byte[] salt, UUID user) {
         super(database, Statements.UPDATE_USER_CREDENTIALS);
         this.email = email;
         this.password = password;
@@ -29,8 +29,8 @@ public class UpdateUserCredentialsStatement extends AbstractStatement<Integer> {
             PreparedStatement statement = connection.prepareStatement(sql());
             statement.setString(1, email);
             statement.setString(2, password);
-            statement.setString(3, salt);
-            statement.setObject(1, user);
+            statement.setBytes(3, salt);
+            statement.setObject(4, user);
             return statement.executeUpdate();
         }
     }

@@ -1,6 +1,6 @@
 package io.sponges.bot.dashboard.dao;
 
-import io.sponges.bot.dashboard.database.statement.update.UpdateClientAuthMethodStatement;
+import io.sponges.bot.dashboard.database.statement.update.UpdateClientStatement;
 
 import java.util.UUID;
 
@@ -9,11 +9,13 @@ public class ClientDAO extends DAO {
     private final UUID id;
     private final UUID botId;
     private int authMethod;
+    private String clientName;
 
-    public ClientDAO(UUID id, UUID botId, int authMethod) {
+    public ClientDAO(UUID id, UUID botId, int authMethod, String clientName) {
         this.id = id;
         this.botId = botId;
         this.authMethod = authMethod;
+        this.clientName = clientName;
     }
 
     public UUID getId() {
@@ -30,6 +32,17 @@ public class ClientDAO extends DAO {
 
     public void setAuthMethod(int authMethod) throws Exception {
         this.authMethod = authMethod;
-        new UpdateClientAuthMethodStatement(database, authMethod, id).executeAsync();
+    }
+
+    public String getClientName() {
+        return clientName;
+    }
+
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
+    }
+
+    public void update() throws Exception {
+        new UpdateClientStatement(database, authMethod, clientName, id).executeAsync();
     }
 }

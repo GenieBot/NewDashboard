@@ -1,1 +1,1 @@
-SELECT bot_id, auth_method FROM clients WHERE id=?
+SELECT bot_id, auth_method, client_name FROM clients WHERE id=?

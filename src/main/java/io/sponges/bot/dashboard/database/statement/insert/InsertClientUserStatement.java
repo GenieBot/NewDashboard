@@ -32,12 +32,11 @@ public class InsertClientUserStatement extends AbstractStatement<ClientUserDAO> 
             statement.setObject(2, user);
             statement.setObject(3, botId);
             statement.setObject(4, client);
-            if (statement.execute()) {
-                ClientUserDAO dao = new ClientUserDAO(id, user, client, botId);
-                dao.setDatabase(database);
-                return dao;
-            }
-            return null;
+            int result = statement.executeUpdate();
+            if (result <= 0) return null;
+            ClientUserDAO dao = new ClientUserDAO(id, user, client, botId);
+            dao.setDatabase(database);
+            return dao;
         }
     }
 }

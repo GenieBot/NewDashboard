@@ -1,1 +1,1 @@
-SELECT token, refresh_token, expires_in FROM oauth WHERE user_id=?
+SELECT token, refresh_token, expires_in, start_time FROM oauth WHERE user_id=?

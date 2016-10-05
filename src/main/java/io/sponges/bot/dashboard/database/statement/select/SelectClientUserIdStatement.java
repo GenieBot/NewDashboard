@@ -27,7 +27,7 @@ public class SelectClientUserIdStatement extends AbstractStatement<UUID> {
             statement.setObject(1, client);
             statement.setObject(2, user);
             ResultSet results = statement.executeQuery();
-            if (!results.isBeforeFirst()) {
+            if (!results.next()) {
                 return null;
             }
             return UUID.fromString(results.getString(1));

@@ -9,9 +9,9 @@ public class UserCredentialsDAO extends DAO {
     private final UUID user;
     private String email;
     private String password;
-    private String salt;
+    private byte[] salt;
 
-    public UserCredentialsDAO(UUID user, String email, String password, String salt) {
+    public UserCredentialsDAO(UUID user, String email, String password, byte[] salt) {
         this.user = user;
         this.email = email;
         this.password = password;
@@ -38,11 +38,11 @@ public class UserCredentialsDAO extends DAO {
         this.password = password;
     }
 
-    public String getSalt() {
+    public byte[] getSalt() {
         return salt;
     }
 
-    public void setSalt(String salt) {
+    public void setSalt(byte[] salt) {
         this.salt = salt;
     }
 

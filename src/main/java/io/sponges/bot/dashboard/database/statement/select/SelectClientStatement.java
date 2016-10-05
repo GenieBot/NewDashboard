@@ -25,12 +25,13 @@ public class SelectClientStatement extends AbstractStatement<ClientDAO> {
             PreparedStatement statement = connection.prepareStatement(sql());
             statement.setObject(1, id);
             ResultSet results = statement.executeQuery();
-            if (!results.isBeforeFirst()) {
+            if (!results.next()) {
                 return null;
             }
             UUID botId = UUID.fromString(results.getString(1));
             int authMethod = results.getInt(2);
-            ClientDAO dao = new ClientDAO(id, botId, authMethod);
+            String clientName = results.getString(3);
+            ClientDAO dao = new ClientDAO(id, botId, authMethod, clientName);
             dao.setDatabase(database);
             return dao;
         }

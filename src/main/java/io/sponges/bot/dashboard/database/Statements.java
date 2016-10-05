@@ -25,10 +25,11 @@ public enum Statements {
     SELECT_NETWORK_ID("dml/select/select_network_id.sql"),
     SELECT_NETWORK("dml/select/select_network.sql"),
     SELECT_CLIENT_USER_ID("dml/select/select_client_user_id.sql"),
+    SELECT_CLIENT_USER_IDS("dml/select/select_client_user_ids.sql"),
     SELECT_CLIENT_USER("dml/select/select_client_user.sql"),
     SELECT_OAUTH("dml/select/select_oauth.sql"),
 
-    UPDATE_CLIENT_AUTH_METHOD("dml/update/update_client_auth_method.sql"),
+    UPDATE_CLIENT("dml/update/update_client.sql"),
     UPDATE_USER_CREDENTIALS("dml/update/update_user_credentials.sql"),
     UPDATE_OAUTH("dml/update/update_oauth.sql")
 

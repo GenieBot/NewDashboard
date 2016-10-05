@@ -1,1 +1,1 @@
-INSERT INTO oauth VALUES (?, ?, ?, ?);
+INSERT INTO oauth VALUES (?, ?, ?, ?, ?);

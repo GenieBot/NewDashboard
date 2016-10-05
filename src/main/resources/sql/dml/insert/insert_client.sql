@@ -1,1 +1,1 @@
-INSERT INTO clients VALUES (?, ?, ?);
+INSERT INTO clients VALUES (?, ?, ?, ?);

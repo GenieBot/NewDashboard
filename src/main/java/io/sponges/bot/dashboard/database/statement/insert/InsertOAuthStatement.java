@@ -15,13 +15,15 @@ public class InsertOAuthStatement extends AbstractStatement<OAuthDAO> {
     private final String token;
     private final String refreshToken;
     private final int expiresIn;
+    private final int startTime;
 
-    public InsertOAuthStatement(Database database, UUID user, String token, String refreshToken, int expiresIn) {
+    public InsertOAuthStatement(Database database, UUID user, String token, String refreshToken, int expiresIn, int startTime) {
         super(database, Statements.INSERT_OAUTH);
         this.user = user;
         this.token = token;
         this.refreshToken = refreshToken;
         this.expiresIn = expiresIn;
+        this.startTime = startTime;
     }
 
     @Override
@@ -32,12 +34,12 @@ public class InsertOAuthStatement extends AbstractStatement<OAuthDAO> {
             statement.setString(2, token);
             statement.setString(3, refreshToken);
             statement.setInt(4, expiresIn);
-            if (statement.execute()) {
-                OAuthDAO dao = new OAuthDAO(user, token, refreshToken, expiresIn);
-                dao.setDatabase(database);
-                return dao;
-            }
-            return null;
+            statement.setInt(5, startTime);
+            int result = statement.executeUpdate();
+            if (result <= 0) return null;
+            OAuthDAO dao = new OAuthDAO(user, token, refreshToken, expiresIn, startTime);
+            dao.setDatabase(database);
+            return dao;
         }
     }
 }

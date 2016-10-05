@@ -24,7 +24,7 @@ public class SelectNetworkIdStatement extends AbstractStatement<UUID> {
             PreparedStatement statement = connection.prepareStatement(sql());
             statement.setObject(1, botId);
             ResultSet results = statement.executeQuery();
-            if (!results.isBeforeFirst()) {
+            if (!results.next()) {
                 return null;
             }
             return UUID.fromString(results.getString(1));

@@ -25,13 +25,14 @@ public class SelectOAuthStatement extends AbstractStatement<OAuthDAO> {
             PreparedStatement statement = connection.prepareStatement(sql());
             statement.setObject(1, user);
             ResultSet results = statement.executeQuery();
-            if (!results.isBeforeFirst()) {
+            if (!results.next()) {
                 return null;
             }
             String token = results.getString(1);
             String refreshToken = results.getString(2);
             int expiresIn = results.getInt(3);
-            OAuthDAO dao = new OAuthDAO(user, token, refreshToken, expiresIn);
+            int startTime = results.getInt(4);
+            OAuthDAO dao = new OAuthDAO(user, token, refreshToken, expiresIn, startTime);
             dao.setDatabase(database);
             return dao;
         }

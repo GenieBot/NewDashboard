@@ -3,5 +3,6 @@ CREATE TABLE IF NOT EXISTS oauth (
   token VARCHAR(255),
   refresh_token VARCHAR(255),
   expires_in INT,
+  start_time INT,
   FOREIGN KEY (user_id) REFERENCES client_users(id)
 );

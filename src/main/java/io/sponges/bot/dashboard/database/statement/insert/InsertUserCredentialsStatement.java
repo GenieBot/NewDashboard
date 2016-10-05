@@ -14,9 +14,9 @@ public class InsertUserCredentialsStatement extends AbstractStatement<UserCreden
     private final UUID user;
     private final String email;
     private final String password;
-    private final String salt;
+    private final byte[] salt;
 
-    public InsertUserCredentialsStatement(Database database, UUID user, String email, String password, String salt) {
+    public InsertUserCredentialsStatement(Database database, UUID user, String email, String password, byte[] salt) {
         super(database, Statements.INSERT_USER_CREDENTIALS);
         this.user = user;
         this.email = email;
@@ -31,13 +31,12 @@ public class InsertUserCredentialsStatement extends AbstractStatement<UserCreden
             statement.setObject(1, user);
             statement.setObject(2, email);
             statement.setObject(3, password);
-            statement.setObject(4, salt);
-            if (statement.execute()) {
-                UserCredentialsDAO dao = new UserCredentialsDAO(user, email, password, salt);
-                dao.setDatabase(database);
-                return dao;
-            }
-            return null;
+            statement.setBytes(4, salt);
+            int result = statement.executeUpdate();
+            if (result <= 0) return null;
+            UserCredentialsDAO dao = new UserCredentialsDAO(user, email, password, salt);
+            dao.setDatabase(database);
+            return dao;
         }
     }
 }

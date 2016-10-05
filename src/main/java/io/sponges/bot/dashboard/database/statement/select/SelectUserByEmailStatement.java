@@ -24,7 +24,7 @@ public class SelectUserByEmailStatement extends AbstractStatement<UUID> {
             PreparedStatement statement = connection.prepareStatement(sql());
             statement.setString(1, email);
             ResultSet results = statement.executeQuery();
-            if (!results.isBeforeFirst()) {
+            if (!results.next()) {
                 return null;
             }
             return UUID.fromString(results.getString(1));

@@ -29,12 +29,11 @@ public class InsertNetworkStatement extends AbstractStatement<NetworkDAO> {
             statement.setObject(1, uuid);
             statement.setObject(2, botId);
             statement.setObject(3, client);
-            if (statement.execute()) {
-                NetworkDAO dao = new NetworkDAO(uuid, botId, client);
-                dao.setDatabase(database);
-                return dao;
-            }
-            return null;
+            int result = statement.executeUpdate();
+            if (result <= 0) return null;
+            NetworkDAO dao = new NetworkDAO(uuid, botId, client);
+            dao.setDatabase(database);
+            return dao;
         }
     }
 }

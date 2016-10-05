@@ -10,12 +10,14 @@ public class OAuthDAO extends DAO {
     private String token;
     private String refreshToken;
     private int expiresIn;
+    private int startTime;
 
-    public OAuthDAO(UUID user, String token, String refreshToken, int expiresIn) {
+    public OAuthDAO(UUID user, String token, String refreshToken, int expiresIn, int startTime) {
         this.user = user;
         this.token = token;
         this.refreshToken = refreshToken;
         this.expiresIn = expiresIn;
+        this.startTime = startTime;
     }
 
     public UUID getUser() {
@@ -46,7 +48,15 @@ public class OAuthDAO extends DAO {
         this.expiresIn = expiresIn;
     }
 
+    public int getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(int startTime) {
+        this.startTime = startTime;
+    }
+
     public void update() throws Exception {
-        new UpdateOAuthStatement(database, token, refreshToken, expiresIn, user).executeAsync();
+        new UpdateOAuthStatement(database, token, refreshToken, expiresIn, startTime, user).executeAsync();
     }
 }

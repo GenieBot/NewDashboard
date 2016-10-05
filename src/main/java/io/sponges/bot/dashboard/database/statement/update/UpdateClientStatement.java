@@ -8,14 +8,16 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.UUID;
 
-public class UpdateClientAuthMethodStatement extends AbstractStatement<Integer> {
+public class UpdateClientStatement extends AbstractStatement<Integer> {
 
     private final int authMethod;
+    private final String clientName;
     private final UUID client;
 
-    public UpdateClientAuthMethodStatement(Database database, int authMethod, UUID client) {
-        super(database, Statements.UPDATE_CLIENT_AUTH_METHOD);
+    public UpdateClientStatement(Database database, int authMethod, String clientName, UUID client) {
+        super(database, Statements.UPDATE_CLIENT);
         this.authMethod = authMethod;
+        this.clientName = clientName;
         this.client = client;
     }
 
@@ -24,7 +26,8 @@ public class UpdateClientAuthMethodStatement extends AbstractStatement<Integer> 
         try (Connection connection = database.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(sql());
             statement.setInt(1, authMethod);
-            statement.setObject(2, client);
+            statement.setString(2, clientName);
+            statement.setObject(3, client);
             return statement.executeUpdate();
         }
     }

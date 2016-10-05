@@ -23,4 +23,8 @@ public interface Context extends AlertHandler {
     Model getModel();
 
     User getUser();
+
+    default boolean isLoggedIn() {
+        return getUser() != null;
+    }
 }

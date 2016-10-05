@@ -14,12 +14,14 @@ public class InsertClientStatement extends AbstractStatement<ClientDAO> {
     private final UUID id;
     private final UUID botId;
     private final int authMethod;
+    private final String clientName;
 
-    public InsertClientStatement(Database database, UUID id, UUID botId, int authMethod) {
+    public InsertClientStatement(Database database, UUID id, UUID botId, int authMethod, String clientName) {
         super(database, Statements.INSERT_CLIENT);
         this.id = id;
         this.botId = botId;
         this.authMethod = authMethod;
+        this.clientName = clientName;
     }
 
     @Override
@@ -29,13 +31,12 @@ public class InsertClientStatement extends AbstractStatement<ClientDAO> {
             statement.setObject(1, id);
             statement.setObject(2, botId);
             statement.setInt(3, authMethod);
-            boolean result = statement.execute();
-            if (result) {
-                ClientDAO dao = new ClientDAO(id, botId, authMethod);
-                dao.setDatabase(database);
-                return dao;
-            }
-            return null;
+            statement.setString(4, clientName);
+            int result = statement.executeUpdate();
+            if (result <= 0) return null;
+            ClientDAO dao = new ClientDAO(id, botId, authMethod, clientName);
+            dao.setDatabase(database);
+            return dao;
         }
     }
 }

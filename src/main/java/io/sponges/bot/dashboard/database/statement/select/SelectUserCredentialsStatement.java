@@ -25,12 +25,12 @@ public class SelectUserCredentialsStatement extends AbstractStatement<UserCreden
             PreparedStatement statement = connection.prepareStatement(sql());
             statement.setObject(1, user);
             ResultSet results = statement.executeQuery();
-            if (!results.isBeforeFirst()) {
+            if (!results.next()) {
                 return null;
             }
             String email = results.getString(1);
             String password = results.getString(2);
-            String salt = results.getString(3);
+            byte[] salt = results.getBytes(3);
             UserCredentialsDAO dao = new UserCredentialsDAO(user, email, password, salt);
             dao.setDatabase(database);
             return dao;

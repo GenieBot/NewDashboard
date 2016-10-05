@@ -25,7 +25,7 @@ public class SelectClientUserStatement extends AbstractStatement<ClientUserDAO> 
             PreparedStatement statement = connection.prepareStatement(sql());
             statement.setObject(1, id);
             ResultSet results = statement.executeQuery();
-            if (!results.isBeforeFirst()) {
+            if (!results.next()) {
                 return null;
             }
             UUID user = UUID.fromString(results.getString(1));

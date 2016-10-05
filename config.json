@@ -1,0 +1,12 @@
+{
+  "clients": {
+    "discord": {
+      "authorization_url": "https://discordapp.com/oauth2/authorize?response_type=code&client_id=168518288773480448&scope=bot+identify+guilds&access_type=offline&permissions=66186257&redirect_uri=http%3A%2F%2Flocalhost%3A4567%2Foauth%2Fdiscord",
+      "token_url": "https://discordapp.com/api/oauth2/token?client_id=%s&client_secret=%s&grant_type=authorization_code&scope=identify+guilds&code=%s&redirect_uri=%s",
+      "redirect_url": "http%3A%2F%2Flocalhost%3A4567%2Foauth%2Fdiscord",
+      "client_id": "168518288773480448",
+      "client_secret": "qX6DQrHUrZ7rBwOHrtJFZBBWNYECCCyD",
+      "user_info_url": "https://discordapp.com/api/v6/users/@me"
+    }
+  }
+}

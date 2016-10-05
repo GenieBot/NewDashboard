@@ -49,8 +49,10 @@ public class ContextImpl implements Context {
 
     @Override
     public ModelAndView createView(String template) {
+        model.withMapping("logged_in", isLoggedIn());
         if (hasAlert()) {
             model.withMapping("alert", getAlert());
+            getSession().removeAttribute(ALERT_SESSION_KEY);
         }
         return new ModelAndView(model.build(), template);
     }

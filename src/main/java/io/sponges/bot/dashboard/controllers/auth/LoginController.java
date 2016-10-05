@@ -1,15 +1,19 @@
 package io.sponges.bot.dashboard.controllers.auth;
 
-import io.sponges.bot.dashboard.Method;
-import io.sponges.bot.dashboard.Context;
-import io.sponges.bot.dashboard.Controller;
-import io.sponges.bot.dashboard.Route;
+import io.sponges.bot.dashboard.*;
+import io.sponges.bot.dashboard.entities.User;
+import io.sponges.bot.dashboard.entities.UserManager;
 import spark.ModelAndView;
+import spark.Request;
+import spark.Session;
 
 public class LoginController extends Controller {
 
-    public LoginController() {
+    private final UserManager userManager;
+
+    public LoginController(UserManager userManager) {
         super("/login", false);
+        this.userManager = userManager;
     }
 
     @Route(method = Method.GET)
@@ -18,7 +22,44 @@ public class LoginController extends Controller {
     }
 
     @Route(method = Method.POST)
-    public String post(Context context) {
-        return "ok lol havent impld yet xdxd";
+    public void post(Context context) {
+        if (context.isLoggedIn()) {
+            context.redirect("/");
+            context.alert("You are already logged in!");
+            return;
+        }
+        Request request = context.getRequest();
+        Session session = request.session();
+        String email = request.queryParams("email");
+        String password = request.queryParams("password");
+        if (!valid(email, password)) {
+            context.redirect("/login");
+            context.alert("Invalid email or password fields!");
+            return;
+        }
+        User user;
+        try {
+            user = userManager.loadUser(session, email);
+        } catch (Exception e) {
+            e.printStackTrace();
+            context.redirect("/login");
+            context.alert("Something went wrong!");
+            return;
+        }
+        if (user == null) {
+            context.redirect("/login");
+            context.alert("Invalid email or password!");
+            return;
+        }
+        byte[] salt = user.getSalt();
+        password = Authentication.toHexString(Authentication.hash(password, salt));
+        if (!user.getEmail().equals(email) || !user.getPassword().equals(password)) {
+            context.redirect("/login");
+            context.alert("Invalid email or password!");
+            return;
+        }
+        userManager.loginUser(session, user);
+        context.redirect("/");
+        context.alert("Logged in!");
     }
 }

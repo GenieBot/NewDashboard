@@ -10,15 +10,13 @@ import java.util.UUID;
 
 public class User {
 
-    private static final String SESSION_TOKEN_KEY = "session_token";
-
     private final UserDAO userDAO;
     private final UserCredentialsDAO userCredentialsDAO;
     private final List<ClientUserDAO> clientUserDAOs;
     private final Session session;
     private final UUID id;
 
-    public User(UserDAO userDAO, UserCredentialsDAO userCredentialsDAO, List<ClientUserDAO> clientUserDAOs,
+    User(UserDAO userDAO, UserCredentialsDAO userCredentialsDAO, List<ClientUserDAO> clientUserDAOs,
                 Session session) {
         this.userDAO = userDAO;
         this.userCredentialsDAO = userCredentialsDAO;
@@ -35,11 +33,19 @@ public class User {
         return userCredentialsDAO.getEmail();
     }
 
-    public Session getSession() {
-        return session;
+    public String getPassword() {
+        return userCredentialsDAO.getPassword();
     }
 
-    public String getSessionToken() {
-        return session.attribute(SESSION_TOKEN_KEY);
+    public byte[] getSalt() {
+        return userCredentialsDAO.getSalt();
+    }
+
+    public UserCredentialsDAO getUserCredentialsDAO() {
+        return userCredentialsDAO;
+    }
+
+    public Session getSession() {
+        return session;
     }
 }

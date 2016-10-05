@@ -23,12 +23,11 @@ public class InsertUserStatement extends AbstractStatement<UserDAO> {
         try (Connection connection = database.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(sql());
             statement.setObject(1, id);
-            if (statement.execute()) {
-                UserDAO dao = new UserDAO(id);
-                dao.setDatabase(database);
-                return dao;
-            }
-            return null;
+            int result = statement.executeUpdate();
+            if (result <= 0) return null;
+            UserDAO dao = new UserDAO(id);
+            dao.setDatabase(database);
+            return dao;
         }
     }
 }

@@ -1,12 +1,22 @@
 package io.sponges.bot.dashboard;
 
+import io.sponges.bot.dashboard.controllers.account.AccountController;
+import io.sponges.bot.dashboard.controllers.account.ChangeEmailController;
+import io.sponges.bot.dashboard.controllers.account.ChangePasswordController;
 import io.sponges.bot.dashboard.controllers.auth.LoginController;
+import io.sponges.bot.dashboard.controllers.auth.LogoutController;
 import io.sponges.bot.dashboard.controllers.auth.RegisterController;
+import io.sponges.bot.dashboard.controllers.client.AddClientController;
 import io.sponges.bot.dashboard.controllers.client.PickClientController;
 import io.sponges.bot.dashboard.controllers.network.NetworkController;
 import io.sponges.bot.dashboard.controllers.network.NetworksController;
+import io.sponges.bot.dashboard.controllers.oauth.OAuthController;
 import io.sponges.bot.dashboard.controllers.store.StoreController;
 import io.sponges.bot.dashboard.controllers.IndexController;
+import io.sponges.bot.dashboard.database.Database;
+import io.sponges.bot.dashboard.entities.ClientManager;
+import io.sponges.bot.dashboard.entities.ClientUserManager;
+import io.sponges.bot.dashboard.entities.UserManager;
 import spark.*;
 
 import java.lang.reflect.InvocationTargetException;
@@ -14,25 +24,35 @@ import java.lang.reflect.InvocationTargetException;
 public class MasterController {
 
     private final Server server;
+    private final UserManager userManager;
 
-    MasterController(Server server) {
+    MasterController(Server server, Configuration configuration, Database database, UserManager userManager,
+                     ClientManager clientManager, ClientUserManager clientUserManager) {
         this.server = server;
+        this.userManager = userManager;
         register(
                 new IndexController(),
                 new NetworksController(),
                 new NetworkController(),
                 new StoreController(),
-                new PickClientController(),
-                new LoginController(),
-                new RegisterController()
+                new PickClientController(clientManager),
+                new AddClientController(configuration, clientManager),
+                new LoginController(userManager),
+                new RegisterController(userManager),
+                new LogoutController(userManager),
+                new AccountController(),
+                new ChangePasswordController(),
+                new ChangeEmailController(),
+                new OAuthController(database, configuration, clientManager, userManager, clientUserManager)
         );
     }
 
     private boolean isAuthenticated(Request request) {
-        // TODO authentication shit
-        return true;
+        Session session = request.session();
+        return userManager.isLoggedIn(session);
     }
 
+    // Could do caching here, doesn't really matter as it is only called on initialization
     private void register(Controller controller, boolean template, Method method, java.lang.reflect.Method execute)
             throws InvocationTargetException, IllegalAccessException {
         Service service = server.getService();
@@ -47,10 +67,15 @@ public class MasterController {
                 return;
             }
             m.invoke(service, controller.getRoute(), (TemplateViewRoute) (request, response) -> {
-                Context context = new ContextImpl(request, response, new Model());
-                if (controller.isAuth() && !isAuthenticated(request)) {
-                    context.alert("Not authenticated!");
-                    return new ModelAndView(context.getModel().build(), "error.ftl");
+                ContextImpl context = new ContextImpl(request, response, new Model());
+                if (isAuthenticated(request)) {
+                    context.setUser(userManager.getUser(request.session()));
+                } else {
+                    if (controller.isAuth()) {
+                        context.alert("You must login to access that!");
+                        context.redirect("/login");
+                        return null;
+                    }
                 }
                 return (ModelAndView) execute.invoke(controller, context);
             }, server.getEngine());
@@ -63,10 +88,17 @@ public class MasterController {
                 return;
             }
             m.invoke(service, controller.getRoute(), (spark.Route) (request, response) -> {
-                if (controller.isAuth() && !isAuthenticated(request)) {
-                    return "Not authenticated.";
+                ContextImpl context = new ContextImpl(request, response, new Model());
+                if (isAuthenticated(request)) {
+                    context.setUser(userManager.getUser(request.session()));
+                } else {
+                    if (controller.isAuth()) {
+                        context.alert("You must login to access that!");
+                        context.redirect("/login");
+                        return "Not authenticated";
+                    }
                 }
-                return execute.invoke(controller, new ContextImpl(request, response, new Model()));
+                return execute.invoke(controller, context);
             });
         }
     }

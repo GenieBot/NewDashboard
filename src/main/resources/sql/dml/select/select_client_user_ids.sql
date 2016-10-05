@@ -1,0 +1,1 @@
+SELECT id FROM client_users WHERE user_id=?
